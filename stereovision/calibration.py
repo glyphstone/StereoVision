@@ -168,6 +168,7 @@ class StereoCalibrator(object):
         if cv2.waitKey(0):
             cv2.destroyWindow(window_name)
 
+
     def __init__(self, rows, columns, square_size, image_size):
         """
         Store variables relevant to the camera calibration.
@@ -197,6 +198,15 @@ class StereoCalibrator(object):
         #: Array of found corner coordinates from calibration images for left
         #: and right camera, respectively
         self.image_points = {"left": [], "right": []}
+
+    def get_image_corners(self, image):
+        """ Utility for generating the corners and painting on original image for saving
+            Throws ChessboardNotFoundError if no chessboard was found """
+        corners = self._get_corners( image)
+        img_corners = image
+        cv2.drawChessboardCorners( img_corners, (self.rows, self.columns), corners, True)
+        return img_corners
+
 
     def add_corners(self, image_pair, show_results=False):
         """
